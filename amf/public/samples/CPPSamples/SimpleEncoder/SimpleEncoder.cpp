@@ -55,7 +55,7 @@ static const wchar_t *pCodec = AMFVideoEncoderVCE_AVC;
  //#define ENABLE_4K
 
 #ifdef _WIN32
-static amf::AMF_MEMORY_TYPE memoryTypeIn  = amf::AMF_MEMORY_DX9;
+static amf::AMF_MEMORY_TYPE memoryTypeIn  = amf::AMF_MEMORY_DX11;
 #else
 static amf::AMF_MEMORY_TYPE memoryTypeIn  = amf::AMF_MEMORY_VULKAN;
 #endif
@@ -71,7 +71,7 @@ static amf_int32 heightIn                 = 1080;
 static amf_int32 frameRateIn              = 30;
 static amf_int64 bitRateIn                = 5000000L; // in bits, 5MBit
 static amf_int32 rectSize                 = 50;
-static amf_int32 frameCount               = 500;
+static amf_int32 frameCount               = 1500;
 static bool bMaximumSpeed = true;
 
 #define START_TIME_PROPERTY L"StartTimeProperty" // custom property ID to store submission time in a frame - all custom properties are copied from input to output
@@ -170,6 +170,9 @@ int main(int argc, char* argv[])
             res = encoder->SetProperty(AMF_VIDEO_ENCODER_QUALITY_PRESET, AMF_VIDEO_ENCODER_QUALITY_PRESET_SPEED);
             AMF_RETURN_IF_FAILED(res, L"SetProperty(AMF_VIDEO_ENCODER_QUALITY_PRESET, AMF_VIDEO_ENCODER_QUALITY_PRESET_SPEED) failed");
         }
+
+        res = encoder->SetProperty(AMF_VIDEO_ENCODER_LOWLATENCY_MODE, true);
+        AMF_RETURN_IF_FAILED(res, L"SetProperty(AMF_VIDEO_ENCODER_LOWLATENCY_MODE, true) failed");
 
         res = encoder->SetProperty(AMF_VIDEO_ENCODER_TARGET_BITRATE, bitRateIn);
         AMF_RETURN_IF_FAILED(res, L"SetProperty(AMF_VIDEO_ENCODER_TARGET_BITRATE, %" LPRId64 L") failed", bitRateIn);
